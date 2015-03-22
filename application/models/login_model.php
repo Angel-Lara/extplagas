@@ -1,24 +1,34 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-/**
- * 
- */
-class Login_model extends CI_Model {
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+class Login_Model extends CI_Model{
 	
-	public function __construct() {
-		parent::__construct();
-	}
+function valid_user($username, $password)
+{
+  $this->db->where('username', $username);
+  $this->db->where('password', $password);
+  
+  $query = $this->db->get('users');
+   
+   if($query->num_rows() >0){
+
+ 	return TRUE;
 	
-	public function login_user($username,$password)
-	{
-		$this->db->where('username',$username);
-		$this->db->where('password',$password);
-		$query = $this->db->get('users');
-		if($query->num_rows() == 1)
-		{
-			return $query->row();
-		}else{
-			$this->session->set_flashdata('usuario_incorrecto','Los datos introducidos son incorrectos');
-			redirect(base_url().'login','refresh');
-		}
-	}
+    }else{
+    	
+		return FALSE;
+    }
 }
+
+function valid_user_ajax($username){ 
+			
+	$this->db->where('username', $username);
+    $query = $this->db->get('users');
+		  
+		 if($query->num_rows() >0){
+                
+			 echo $query->num_rows();
+			 
+		     }
+  }
+
+} 
